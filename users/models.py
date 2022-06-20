@@ -8,8 +8,8 @@ class User(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=50)
     last_name =  models.CharField(max_length=50)
-    updated_at = datetime.now()
+    updated_at = models.CharField(max_length=50)
     
     objects = CustomUserManager
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name','email']
     
