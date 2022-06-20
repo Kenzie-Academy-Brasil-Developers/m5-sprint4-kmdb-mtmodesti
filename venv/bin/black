@@ -1,0 +1,8 @@
+#!/home/modesti/Desktop/marcelo/m5/m5_sprint_4/m5-sprint4-kmdb-mtmodesti/venv/bin/python
+# -*- coding: utf-8 -*-
+import re
+import sys
+from black import patched_main
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(patched_main())
