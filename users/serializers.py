@@ -10,16 +10,18 @@ class RegisterSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
     date_joined = serializers.CharField(read_only=True)
     updated_at = serializers.CharField(read_only=True)
-    
+
     def validate_email(self, value):
         if User.objects.filter(email__iexact=value).exists():
             raise serializers.ValidationError("email já existe")
-        
-        return value
-    
-    def create(self, validated_data: dict) -> User:
-        return User.objects.create_superuser(**validated_data) 
-    
-   
-    
 
+        return value
+
+    def create(self, validated_data: dict) -> User:
+        return User.objects.create_superuser(**validated_data)
+
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=100)
+    password = serializers.CharField(write_only=True)
