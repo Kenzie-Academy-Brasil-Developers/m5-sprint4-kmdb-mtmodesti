@@ -8,3 +8,5 @@ class Movie(models.Model):
     classification = models.IntegerField()
     synopsis = models.TextField()
     
+    genres = models.ManyToManyField("genres.Genre", related_name="movie")
+    
