@@ -11,8 +11,8 @@ from .models import User
 class RegisterView(APIView):
     def post(self, request):
         
-      #  serializer = RegisterSerializer(data=request.data)
-
+        serializer = RegisterSerializer(data=request.data)
+        print(serializer)
         #serializer.is_valid(raise_exception=True)
 
        # serializer.save()
