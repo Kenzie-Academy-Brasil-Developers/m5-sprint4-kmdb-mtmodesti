@@ -10,7 +10,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name =  models.CharField(max_length=50)
     username = models.CharField(max_length=50)
-    updated_at = models.CharField(max_length=50)
+    updated_at = models.DateTimeField(auto_now=True)
     REQUIRED_FIELDS = ['first_name', 'last_name','username']
     USERNAME_FIELD = "email"
     objects = CustomUserManager
