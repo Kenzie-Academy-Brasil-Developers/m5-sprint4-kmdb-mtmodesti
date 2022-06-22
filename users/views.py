@@ -31,7 +31,6 @@ class LoginView(APIView):
 
         if user:
             token, _ = Token.objects.get_or_create(user=user)
-            # token = Token.objects.get_or_create(user=user)[0]
 
             return Response({"token": token.key})
 

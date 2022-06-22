@@ -10,7 +10,7 @@ class Review(models.Model):
     
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name='user')
     
-    movie = models.ManyToOneRel("movies.movie", on_delete=models.CASCADE, related_name='movie', field_name='movie', to='movie' )
+    movie = models.ManyToOneRel("movies.Movie", on_delete=models.CASCADE, related_name='movie', field_name='movie', to='movie' )
     
     
     

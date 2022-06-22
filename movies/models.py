@@ -1,5 +1,5 @@
-
 from django.db import models
+
 
 class Movie(models.Model):
     title = models.CharField(max_length=127)
@@ -8,5 +8,7 @@ class Movie(models.Model):
     classification = models.IntegerField()
     synopsis = models.TextField()
     
-    genres = models.ManyToManyField("genres.Genre", related_name="movie")
+    genres = models.ManyToManyField("genres.Genre", related_name="movies")
     
+    
+

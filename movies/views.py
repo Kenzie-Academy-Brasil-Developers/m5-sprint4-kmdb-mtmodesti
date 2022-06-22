@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView, Response, status
 from movies.serializers import RegisterMovieSerializer
+from .models import Movie
 
 class MoviesView(APIView):
     def get(self,request):
         
-        
-        
         return Response({"as":"rota de listar filmes"})
-        ...
+        
     ...
     
     def post(self,request):
@@ -17,5 +16,9 @@ class MoviesView(APIView):
         
         serializer.is_valid(raise_exception=True)
         
-        return Response({"as":"rota de postar filmes"})
+        serializer.save()
+        
+      
+        
+        return Response({"as":"rota de postar filme"})
         
