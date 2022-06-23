@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from movies.models import Movie
 from genres.serializers import RegisterGenreSerializer
+from helpers.movies_helpers import Helper
 
 
 class RegisterMovieSerializer(serializers.Serializer):
@@ -10,15 +11,27 @@ class RegisterMovieSerializer(serializers.Serializer):
     premiere = serializers.CharField()
     classification = serializers.IntegerField()
     synopsis = serializers.CharField()
-    genres = RegisterGenreSerializer()
+    genres = serializers.ListField(
+        child=RegisterGenreSerializer()
+    )
     
 
     def create(self, validated_data):
         
+        genres = validated_data.pop("genres")
+        
+        movie = Movie.objects.create(**validated_data)
+        
+        
+        
+        movie.genres.add(genres)
+        
+        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+        
+        
         return Movie.objects.create(**validated_data)
     
-    
-    
+        
     
     ''' 
     {
