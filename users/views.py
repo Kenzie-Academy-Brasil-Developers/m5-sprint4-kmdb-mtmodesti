@@ -4,6 +4,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView, Response, status
 from users.serializers import LoginSerializer, RegisterSerializer
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from movies.permissions import IsOWner
+from rest_framework.authentication import TokenAuthentication
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -39,11 +43,15 @@ class LoginView(APIView):
         )
         
 class UserView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes     = [IsAdminUser, IsOWner]
     def get(self,request):
         return Response('rota de listar todos users')
     
 
 class UserViewById(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes     = [IsAdminUser, IsOWner]
     def get(self,request, user_id):
         return Response('rota de listar 1 user')
     
