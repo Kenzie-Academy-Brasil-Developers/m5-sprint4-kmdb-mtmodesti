@@ -6,4 +6,14 @@ class IsAdmin(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         
-        return "modesti" in request.user.email
+        return "" in request.user.email
+    
+
+
+class IsOWner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        return obj == request.user
+    

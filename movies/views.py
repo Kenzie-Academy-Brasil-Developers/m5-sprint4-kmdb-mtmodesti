@@ -5,11 +5,11 @@ from .models import Movie
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from movies.permissions import IsAdmin
+from movies.permissions import IsAdmin, IsOWner
 
 class MoviesView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAuthenticated, IsOWner]
     
     
     def get(self,request):
