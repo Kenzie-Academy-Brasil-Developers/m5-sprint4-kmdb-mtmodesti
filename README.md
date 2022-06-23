@@ -1,5 +1,2 @@
-# KMDB
+criar rota de listar users e user pelo id
 
-Fazer rota de Delete
-
-Fazer rota de get por id

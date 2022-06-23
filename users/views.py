@@ -37,3 +37,13 @@ class LoginView(APIView):
         return Response(
             {"detail": "invalid email or password"}, status.HTTP_401_UNAUTHORIZED
         )
+        
+class UserView(APIView):
+    def get(self,request):
+        return Response('rota de listar todos users')
+    
+
+class UserViewById(APIView):
+    def get(self,request, user_id):
+        return Response('rota de listar 1 user')
+    
