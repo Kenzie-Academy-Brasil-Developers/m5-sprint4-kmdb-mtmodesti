@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView, Response, status
 from movies.serializers import RegisterMovieSerializer
 from .models import Movie
@@ -27,4 +27,13 @@ class MoviesView(APIView):
         serializer.is_valid(raise_exception=True)
 
         serializer.save()
-        return Response({"as": "rota de postar filme"})
+        return Response(serializer.data)
+    
+    
+class MovieIdView(APIView):
+    def get(self, request, movie_id):
+        print('XXXXXXXXXXXXXXXXXXXXXXXX')
+        movie = get_object_or_404(Movie, pk=movie_id)
+        serializer = RegisterMovieSerializer(movie)
+        return Response(serializer.data)
+    
