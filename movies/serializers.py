@@ -23,18 +23,4 @@ class RegisterMovieSerializer(serializers.Serializer):
                 genre, _ = Genre.objects.get_or_create(**genre_type)
                 movie.genres.add(genre)
                 
-        return genre
-        
- 
-    
-''' 
-{
-	"title":"Matrix",
-	"duration":"175m",
-	"premiere":"1972-09-10",
-	"classification": 14,
-	"synopsis":"resumo do filme",
-	"genres": {"name":"ficção"}
-}
-
-'''
+        return movie
