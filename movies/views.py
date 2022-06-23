@@ -22,9 +22,6 @@ class MoviesView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print('entrei no post')
-        print('-----------------------'*10)
-        print(request.user.is_superuser)
         serializer = RegisterMovieSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
