@@ -5,13 +5,13 @@ from movies.serializers import RegisterMovieSerializer
 from .models import Movie
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from movies.permissions import IsOWner
 
 
 class MoviesView(APIView):
-    permission_classes = [IsAuthenticated, IsOWner]
     authentication_classes = [TokenAuthentication]
+    permission_classes     = [IsAdminUser, IsOWner]
 
     def get(self, request):
 
@@ -22,7 +22,9 @@ class MoviesView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-
+        print('entrei no post')
+        print('-----------------------'*10)
+        print(request.user.is_superuser)
         serializer = RegisterMovieSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
@@ -32,6 +34,8 @@ class MoviesView(APIView):
     
     
 class MovieIdView(APIView):
+   
+    
     def get(self, request, movie_id):
         movie = get_object_or_404(Movie, pk=movie_id)
         serializer = RegisterMovieSerializer(movie)
