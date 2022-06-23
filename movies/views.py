@@ -32,8 +32,12 @@ class MoviesView(APIView):
     
 class MovieIdView(APIView):
     def get(self, request, movie_id):
-        print('XXXXXXXXXXXXXXXXXXXXXXXX')
         movie = get_object_or_404(Movie, pk=movie_id)
         serializer = RegisterMovieSerializer(movie)
         return Response(serializer.data)
+    
+    def delete(self, request, movie_id):
+         movie = get_object_or_404(Movie, pk=movie_id)
+         movie.delete()
+         return Response(status=204)
     
