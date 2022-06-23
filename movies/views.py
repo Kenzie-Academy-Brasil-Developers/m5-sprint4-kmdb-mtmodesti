@@ -1,3 +1,4 @@
+from functools import partial
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView, Response, status
 from movies.serializers import RegisterMovieSerializer
@@ -40,4 +41,24 @@ class MovieIdView(APIView):
          movie = get_object_or_404(Movie, pk=movie_id)
          movie.delete()
          return Response(status=204)
-    
+     
+    def patch(self, request, movie_id):
+        
+        movie = get_object_or_404(Movie, pk=movie_id)
+        
+        serializer = RegisterMovieSerializer(movie, request.data, partial=True)
+        
+        serializer.is_valid(raise_exception=True)
+        
+        invalid_keys = ("genres")
+        
+        for key in serializer.validated_data.keys():
+            if key in invalid_keys:
+                return Response({"message" : f"You can not update {key} property."}, status=422)
+            
+        serializer.save()
+        
+        
+        return Response(serializer.data)
+        
+     

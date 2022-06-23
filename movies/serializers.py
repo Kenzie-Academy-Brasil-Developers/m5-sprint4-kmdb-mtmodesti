@@ -24,3 +24,19 @@ class RegisterMovieSerializer(serializers.Serializer):
                 movie.genres.add(genre)
                 
         return movie
+
+
+    def update(self,  instance, validated_data):
+        try:
+            characteristic_info = validated_data
+            
+            characterisct_list = Movie.objects.get_or_create(
+                characteristic_info
+            )
+            for characteristic in characterisct_list:
+                instance.characteristic.add(characteristic)
+        finally:
+            for key, value in validated_data.items():
+                setattr(instance, key, value)
+            instance.save()
+            return instance
