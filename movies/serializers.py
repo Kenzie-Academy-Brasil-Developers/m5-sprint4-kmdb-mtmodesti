@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from movies.models import Movie
 from genres.serializers import RegisterGenreSerializer
-from helpers.movies_helpers import Helper
+from genres.models import Genre
 
 
 class RegisterMovieSerializer(serializers.Serializer):
@@ -11,30 +11,24 @@ class RegisterMovieSerializer(serializers.Serializer):
     premiere = serializers.CharField()
     classification = serializers.IntegerField()
     synopsis = serializers.CharField()
-    genres = serializers.ListField(
-        child=RegisterGenreSerializer()
-    )
+    genres = RegisterGenreSerializer(many=True)
     
-
     def create(self, validated_data):
         
-        genres = validated_data.pop("genres")
+        genres_info = validated_data.pop("genres")
         
         movie = Movie.objects.create(**validated_data)
+                
+        for genre_type in genres_info:
+                genre, _ = Genre.objects.get_or_create(**genre_type)
+                movie.genres.add(genre)
+                
+        return genre
         
-        
-        
-        movie.genres.add(genres)
-        
-        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-        
-        
-        return Movie.objects.create(**validated_data)
+ 
     
-        
-    
-    ''' 
-    {
+''' 
+{
 	"title":"Matrix",
 	"duration":"175m",
 	"premiere":"1972-09-10",
@@ -43,4 +37,4 @@ class RegisterMovieSerializer(serializers.Serializer):
 	"genres": {"name":"ficção"}
 }
 
-    '''
+'''
