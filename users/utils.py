@@ -11,7 +11,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
 
         user = self.model(
-            email=email, is_staff=0, is_superuser=is_superuser, **extra_fields
+            email=email, is_superuser=is_superuser, is_staff=is_staff, **extra_fields
         )
 
         user.set_password(password)
@@ -29,7 +29,7 @@ class CustomUserManager(BaseUserManager):
             **extra_fields
         )
 
-     def create_superuser(self, email, password, **extra_fields):
+     def create_superuser(self, email, password, **extra_fields,):
         return self._create_user(
             email=email,
             password=password,
