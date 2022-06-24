@@ -61,5 +61,12 @@ class MovieIdView(APIView):
         
         
         return Response(serializer.data)
-        
-     
+    
+    
+class MovieReviewById(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes     = [IsAdminUser, IsOWner]
+    def post(self, request, movie_id):
+        movie = get_object_or_404(Movie, pk=movie_id)
+        serializer = RegisterMovieSerializer(movie)
+        return Response(serializer.data)
