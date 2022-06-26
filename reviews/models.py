@@ -11,9 +11,9 @@ class ReviewChoices(models.TextChoices):
 
 class Review(models.Model):
 
-    stars = models.IntegerField(validators=[MinValueValidator(0),
-                                       MaxValueValidator(10)])
-
+    stars = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(10)]
+    )
     review = models.TextField()
 
     spoilers = models.BooleanField(default=False)
@@ -34,6 +34,6 @@ class Review(models.Model):
         to="movie",
     )
 
-    critic = models.ForeignKey(
+    movie = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="review"
     )
