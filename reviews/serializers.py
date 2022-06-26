@@ -5,7 +5,17 @@ from .models import Review
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
-        id = serializers.IntegerField(read_only=True)
-
+        
         model = Review
-        fields = ["__all__"]
+        
+        fields = ["stars", "review","spoilers","recomendation" ]
+        
+        read_only_fields = ["id"]
+        
+        
+        
+        
+    def create(self, validated_data:dict) -> Review:
+        return Review.objects.create(**validated_data)
+    
+

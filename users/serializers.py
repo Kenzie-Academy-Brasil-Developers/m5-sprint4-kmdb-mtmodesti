@@ -3,8 +3,8 @@ from users.models import User
 
 
 class RegisterSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    email = serializers.EmailField(max_length=100)
+    id     = serializers.IntegerField(read_only=True)
+    email  = serializers.EmailField(max_length=100)
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     password = serializers.CharField(write_only=True)

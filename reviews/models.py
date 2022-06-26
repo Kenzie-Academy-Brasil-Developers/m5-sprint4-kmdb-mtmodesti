@@ -1,5 +1,5 @@
-from pickle import FALSE
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class ReviewChoices(models.TextChoices):
@@ -10,21 +10,17 @@ class ReviewChoices(models.TextChoices):
 
 
 class Review(models.Model):
-    
-    stars = models.IntegerField()
-    
+
+    stars = models.IntegerField(validators=[MinValueValidator(0),
+                                       MaxValueValidator(10)])
+
     review = models.TextField()
-    
+
     spoilers = models.BooleanField(default=False)
 
     recomendation = models.TextField(
-        max_length=50, choices=ReviewChoices.choices, default=ReviewChoices.NO_OPINION
+        choices=ReviewChoices.choices, default=ReviewChoices.NO_OPINION
     )
-    
-    
-    
-    
-    
 
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="user"
@@ -36,4 +32,8 @@ class Review(models.Model):
         related_name="movie",
         field_name="movie",
         to="movie",
+    )
+
+    critic = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="review"
     )

@@ -7,16 +7,17 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from movies.permissions import IsOWner
+from reviews.serializers import ReviewSerializer
 
 
 class MoviesView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes     = [IsAdminUser, IsOWner]
+    permission_classes = [IsAdminUser, IsOWner]
 
     def get(self, request):
 
         movies = Movie.objects.all()
-        
+
         serializer = RegisterMovieSerializer(movies, many=True)
 
         return Response(serializer.data)
@@ -28,45 +29,62 @@ class MoviesView(APIView):
 
         serializer.save()
         return Response(serializer.data)
-    
-    
+
+
 class MovieIdView(APIView):
-   
-    
     def get(self, request, movie_id):
         movie = get_object_or_404(Movie, pk=movie_id)
         serializer = RegisterMovieSerializer(movie)
         return Response(serializer.data)
-    
+
     def delete(self, request, movie_id):
-         movie = get_object_or_404(Movie, pk=movie_id)
-         movie.delete()
-         return Response(status=204)
-     
-    def patch(self, request, movie_id):
-        
         movie = get_object_or_404(Movie, pk=movie_id)
-        
+        movie.delete()
+        return Response(status=204)
+
+    def patch(self, request, movie_id):
+
+        movie = get_object_or_404(Movie, pk=movie_id)
+
         serializer = RegisterMovieSerializer(movie, request.data, partial=True)
-        
+
         serializer.is_valid(raise_exception=True)
-        
-        invalid_keys = ("genres")
-        
+
+        invalid_keys = "genres"
+
         for key in serializer.validated_data.keys():
             if key in invalid_keys:
-                return Response({"message" : f"You can not update {key} property."}, status=422)
-            
+                return Response(
+                    {"message": f"You can not update {key} property."}, status=422
+                )
+
         serializer.save()
-        
-        
+
         return Response(serializer.data)
-    
-    
+
+
 class MovieReviewById(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes     = [IsAdminUser, IsOWner]
+    permission_classes = [IsAdminUser, IsOWner]
+
     def post(self, request, movie_id):
+        # usar aqui o review serializer
+
         movie = get_object_or_404(Movie, pk=movie_id)
-        serializer = RegisterMovieSerializer(movie)
+     
+        serializer = ReviewSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        
+        #agora criar na tabela 
+
+        # serializer = RegisterMovieSerializer(movie)
+        print(movie.__dict__)
         return Response(serializer.data)
+
+    def get(self, request, movie_id):
+        movie = get_object_or_404(Movie, pk=movie_id)
+        serializer = RegisterMovieSerializer()
+        return Response(
+            {"msg": "rota de listar reviews desse filme", "data": serializer.data}
+        )
