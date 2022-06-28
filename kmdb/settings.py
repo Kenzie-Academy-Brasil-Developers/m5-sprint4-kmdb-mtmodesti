@@ -20,12 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nsh!z_fjj=114jmhdpf&36$osle@w_bjs1z$foc#1bdwl6-y%)'
+SECRET_KEY = 'django-insecure-$^^s!v%66)(gegtfbs081ou%kamy7u0_hsdbqf39rw9wxr5014'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+AUTH_USER_MODEL = 'accounts.User'
 
 
 # Application definition
@@ -37,16 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'genres',
+    'accounts',
     'movies',
+    'genres',
     'reviews',
-    
-    
-    
+    'rest_framework.authtoken'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,6 +134,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_USER_MODEL = "users.User"
-

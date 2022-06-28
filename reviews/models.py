@@ -2,38 +2,21 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
-class ReviewChoices(models.TextChoices):
-    MUST_WATCH = ("MW", "Must Watch")
-    SHOULD_WATCH = ("SW", "Should Watch")
-    AVOID_WATCH = ("AW", "Avoid Watch")
-    NO_OPINION = ("NO", "No Opinion")
+class ChoicesRecomendation(models.TextChoices):
+    MUST_WATCH = ("Must Watch", "MW")
+    SHOULD_WATCH = ("Should Watch", "SW")
+    AVOID_WATCH = ("Avoid Watch", "AW")
+    NO_OPINION = ("No Opinion", "NO")
 
 
 class Review(models.Model):
-
     stars = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(10)]
-    )
+        validators=[MinValueValidator(1), MaxValueValidator(10)])
     review = models.TextField()
-
     spoilers = models.BooleanField(default=False)
-
-    recomendation = models.TextField(
-        choices=ReviewChoices.choices, default=ReviewChoices.NO_OPINION
-    )
-
-    user = models.ForeignKey(
-        "users.User", on_delete=models.CASCADE, related_name="user"
-    )
-
-    movie = models.ManyToOneRel(
-        "movies.Movie",
-        on_delete=models.CASCADE,
-        related_name="movie",
-        field_name="movie",
-        to="movie",
-    )
-
-    movie = models.ForeignKey(
-        "users.User", on_delete=models.CASCADE, related_name="review"
-    )
+    recomendation = models.CharField(
+        max_length=50, choices=ChoicesRecomendation.choices, default=ChoicesRecomendation.NO_OPINION)
+    movie_id = models.ForeignKey(
+        "movies.Movie", on_delete=models.CASCADE, related_name="reviews")
+    critic = models.ForeignKey(
+        "accounts.User", on_delete=models.CASCADE, related_name="reviews")

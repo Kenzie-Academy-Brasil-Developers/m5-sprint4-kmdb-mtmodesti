@@ -1,42 +1,55 @@
 from rest_framework import serializers
-from movies.models import Movie
-from genres.serializers import RegisterGenreSerializer
+from genres.serializers import GenreSerializer
 from genres.models import Genre
+from movies.models import Movie
 
 
-class RegisterMovieSerializer(serializers.Serializer):
+class MovieSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField()
+    premiere = serializers.DateTimeField()
     duration = serializers.CharField()
-    premiere = serializers.CharField()
     classification = serializers.IntegerField()
     synopsis = serializers.CharField()
-    genres = RegisterGenreSerializer(many=True)
-    
+    genres = GenreSerializer(many=True)
+
     def create(self, validated_data):
-        
-        genres_info = validated_data.pop("genres")
-        
+        genres_data = validated_data.get('genres', [])
+
+        genres = []
+
+        for element in genres_data:
+            (genre, is_created) = Genre.objects.get_or_create(
+                **element)
+            genres.append(genre)
+
+        del validated_data['genres']
+
         movie = Movie.objects.create(**validated_data)
-                
-        for genre_type in genres_info:
-                genre, _ = Genre.objects.get_or_create(**genre_type)
-                movie.genres.add(genre)
-                
+
+        movie.genres.set(genres)
+
         return movie
 
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.premiere = validated_data.get('premiere', instance.premiere)
+        instance.duration = validated_data.get('duration', instance.duration)
+        instance.classification = validated_data.get(
+            'classification', instance.classification)
+        instance.synopsis = validated_data.get('synopsis', instance.synopsis)
 
-    def update(self,  instance, validated_data):
-        try:
-            characteristic_info = validated_data
-            
-            characterisct_list = Movie.objects.get_or_create(
-                characteristic_info
-            )
-            for characteristic in characterisct_list:
-                instance.characteristic.add(characteristic)
-        finally:
-            for key, value in validated_data.items():
-                setattr(instance, key, value)
-            instance.save()
-            return instance
+        genres_data = validated_data.get(
+            'genres', instance.genres)
+
+        if (genres_data != instance.genres):
+            genres = []
+            for element in genres_data:
+                (genre, is_created) = Genre.objects.get_or_create(
+                    **element)
+                genres.append(genre)
+            instance.genres.set(genres)
+
+        instance.save()
+
+        return instance

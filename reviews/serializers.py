@@ -1,21 +1,23 @@
-# books/serializers.py
 from rest_framework import serializers
-from .models import Review
+from reviews.models import Review
+
+
+class CriticSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    first_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        
-        model = Review
-        
-        fields = ["stars", "review","spoilers","recomendation" ]
-        
-        read_only_fields = ["id"]
-        
-        
-        
-        
-    def create(self, validated_data:dict) -> Review:
-        return Review.objects.create(**validated_data)
-    
 
+    critic = CriticSerializer(read_only=True)
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+        read_only_fields = ['id']
+        extra_kwargs = {'movie_id': {
+            'required': False}, 'critic': {'required': False}}
+
+    def create(self, validated_data):
+        return Review.objects.create(**validated_data)
