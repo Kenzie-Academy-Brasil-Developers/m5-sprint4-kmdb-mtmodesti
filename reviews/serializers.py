@@ -14,10 +14,9 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = '__all__'
-        read_only_fields = ['id']
-        extra_kwargs = {'movie_id': {
-            'required': False}, 'critic': {'required': False}}
+        fields = "__all__"
+        read_only_fields = ["id"]
+        extra_kwargs = {"movie_id": {"required": False}, "critic": {"required": False}}
 
     def create(self, validated_data):
         return Review.objects.create(**validated_data)

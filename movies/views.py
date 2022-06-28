@@ -65,6 +65,7 @@ class MovieReviewsView(APIView):
     permission_classes = [ReviewPermission]
 
     def post(self, request, movie_id):
+        
         try:
             movie = Movie.objects.get(id=movie_id)
             serializer = ReviewSerializer(data=request.data)
